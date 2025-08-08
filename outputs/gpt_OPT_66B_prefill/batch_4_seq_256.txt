@@ -1,0 +1,30 @@
+Testing GPT-OPT 66B Prefill with parameters:
+ B = 4, P = 256, O = 9216, D = 9216, H = 72, E = 128, I = 36864
+Profiling phase: Q-proj
+ - Latency:  0.0012344121932983398
+ - Active Power: 114.59W
+Profiling phase: K-proj
+ - Latency:  0.0012347698211669922
+ - Active Power: 55.76W
+Profiling phase: V-proj
+ - Latency:  0.0012359619140625
+ - Active Power: 48.33W
+Profiling phase: QKT
+ - Latency:  0.00013935565948486328
+ - Active Power: 45.50W
+Profiling phase: Softmax
+ - Latency:  9.003818035125732e-05
+ - Active Power: 238.22W
+Profiling phase: AV
+ - Latency:  0.00010693073272705078
+ - Active Power: 44.32W
+Profiling phase: Output-proj
+ - Latency:  0.001245260238647461
+ - Active Power: 61.07W
+Profiling phase: FFN-1
+ - Latency:  0.004446864128112793
+ - Active Power: 189.89W
+Profiling phase: Down-proj
+ - Latency:  0.004340410232543945
+ - Active Power: 82.57W
+Total Latency for GPT-OPT 66B Prefill:0.16593545680949762
