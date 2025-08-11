@@ -1,30 +1,30 @@
 Testing GPT-OPT 66B Prefill with parameters:
- B = 1, P = 1024, O = 9216, D = 9216, H = 72, E = 128, I = 36864
+ B = 1, P = 1024, O = 9216, D = 9216, H = 72, E = 128, I = 36864, M = 1024
 Profiling phase: Q-proj
- - Latency:  0.0012384653091430664
- - Active Power: 52.10W
+ - Latency:  0.0008760690689086914
+ - Active Power: 85.59W
 Profiling phase: K-proj
- - Latency:  0.0012443065643310547
- - Active Power: 38.25W
+ - Latency:  0.0008752346038818359
+ - Active Power: nanW
 Profiling phase: V-proj
- - Latency:  0.0012532472610473633
- - Active Power: 38.31W
+ - Latency:  0.0008751153945922852
+ - Active Power: 52.24W
 Profiling phase: QKT
- - Latency:  0.00038313865661621094
- - Active Power: 38.30W
+ - Latency:  0.00027489662170410156
+ - Active Power: 85.58W
 Profiling phase: Softmax
- - Latency:  0.00029021217709495906
- - Active Power: 245.07W
+ - Latency:  0.00027706857883568966
+ - Active Power: 337.68W
 Profiling phase: AV
- - Latency:  0.00021636486053466797
- - Active Power: 43.78W
+ - Latency:  0.00017571449279785156
+ - Active Power: 56.83W
 Profiling phase: Output-proj
- - Latency:  0.0012472867965698242
- - Active Power: 55.45W
+ - Latency:  0.0008752346038818359
+ - Active Power: 52.24W
 Profiling phase: FFN-1
- - Latency:  0.0044449567794799805
- - Active Power: 83.02W
+ - Latency:  0.0031201839447021484
+ - Active Power: 100.27W
 Profiling phase: Down-proj
- - Latency:  0.004340648651123047
- - Active Power: 83.84W
-Total Latency for GPT-OPT 66B Prefill:0.02606052747059324
+ - Latency:  0.0030517578125
+ - Active Power: 149.08W
+Total Latency for GPT-OPT 66B Prefill:0.01040127512180444

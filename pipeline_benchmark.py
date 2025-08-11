@@ -2,13 +2,16 @@ from gpt_run import test_matmul_iter, profile_power, test_softmax_iter, set_tota
 from itertools import product
 import sys, os
 from contextlib import redirect_stdout
-
+from pynvml import nvmlDeviceGetTotalEnergyConsumption, nvmlInit, nvmlDeviceGetHandleByIndex
 
 # Batch Sizes
-B = [1, 2, 4, 8]
+B = [1,2,4,8]
 
 # Lengths
 P = [256, 512, 1024, 2048]
+# P = [1]
+
+# M = [1, 2048]  # M is the output dimension for QKT
 
 # Original input embedding dimension
 O = [9216]
@@ -29,7 +32,7 @@ F = [128]
 I = [36864]
 
 
-def gpt_OPT_66B_prefill(b, p, o, d, h, e, i):
+def gpt_OPT_66B_prefill(b, p, o, d, h, e, i, m):
     """
     Test the GPT-OPT 66B model in prefill mode with given parameters.
     
@@ -47,7 +50,7 @@ def gpt_OPT_66B_prefill(b, p, o, d, h, e, i):
     f = e
 
     print("Testing GPT-OPT 66B Prefill with parameters:")
-    print(f" B = {b}, P = {p}, O = {o}, D = {d}, H = {h}, E = {e}, I = {i}")
+    print(f" B = {b}, P = {p}, O = {o}, D = {d}, H = {h}, E = {e}, I = {i}, M = {m}")
 
 
     # Q projection
@@ -81,7 +84,7 @@ def test_phase(phase_name, func, *args, **kwargs):
 
     print('Profiling phase:', phase_name)
     print(' - ', end='')
-    result = profile_power(0.01, 'outputs/'+ phase_name, func, *args, **kwargs)
+    result = profile_power(0.0001, 'outputs/'+ phase_name, func, *args, **kwargs)
     # print(result)
     print(f" - Active Power: {result['avg_power_active_w']:.2f}W")
 
@@ -93,4 +96,13 @@ if __name__ == "__main__":
         with open(f"outputs/gpt_OPT_66B_prefill/batch_{b}_seq_{p}.txt", "w") as f:
              with redirect_stdout(f):
                 set_total_latency(0.0)
-                gpt_OPT_66B_prefill(b, p, o, d, h, e, i)
+                gpt_OPT_66B_prefill(b, p, o, d, h, e, i, p)
+
+# if __name__ == "__main__":
+#     os.makedirs("outputs/gpt_OPT_66B_decode", exist_ok=True)
+#     for b, p, o, d, h, e, i, m in product(B, P, O, D, H, E, I, M):
+#         print(f"Running GPT-OPT 66B Decode with B={b}, P={p}, O={o}, D={d}, H={h}, E={e}, I={i}, M={m}")
+#         with open(f"outputs/gpt_OPT_66B_decode/batch_{b}_seq_{p}_m{m}.txt", "w") as f:
+#              with redirect_stdout(f):
+#                 set_total_latency(0.0)
+#                 gpt_OPT_66B_prefill(b, p, o, d, h, e, i, m)
