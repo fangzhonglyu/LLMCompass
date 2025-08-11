@@ -76,6 +76,16 @@ def integrate_energy_joules(timestamps, powers_w):
 
 Total_Latency = 0.0
 
+def set_total_latency(latency):
+    """Set the total latency for the current run."""
+    global Total_Latency
+    Total_Latency = latency
+
+def get_total_latency():
+    """Get the total latency for the current run."""
+    global Total_Latency
+    return Total_Latency
+
 # =========================
 # Workload runners (iterative)
 # =========================

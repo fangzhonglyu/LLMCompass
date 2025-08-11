@@ -1,4 +1,4 @@
-from gpt_run import test_matmul_iter, profile_power, test_softmax_iter
+from gpt_run import test_matmul_iter, profile_power, test_softmax_iter, set_total_latency, get_total_latency
 from itertools import product
 import sys, os
 from contextlib import redirect_stdout
@@ -74,11 +74,7 @@ def gpt_OPT_66B_prefill(b, p, o, d, h, e, i):
     # Down projection
     test_phase('Down-proj', test_matmul_iter, b*p, i, o, "fp16", seconds=2.0)
 
-    from gpt_run import Total_Latency
-
-    print("Total Latency for GPT-OPT 66B Prefill:" + str(Total_Latency))
-
-
+    print("Total Latency for GPT-OPT 66B Prefill:" + str(get_total_latency()))
 
 def test_phase(phase_name, func, *args, **kwargs):
     # record the start latency and power for the given phase
@@ -96,4 +92,5 @@ if __name__ == "__main__":
         print(f"Running GPT-OPT 66B Prefill with B={b}, P={p}, O={o}, D={d}, H={h}, E={e}, I={i}")
         with open(f"outputs/gpt_OPT_66B_prefill/batch_{b}_seq_{p}.txt", "w") as f:
              with redirect_stdout(f):
+                set_total_latency(0.0)
                 gpt_OPT_66B_prefill(b, p, o, d, h, e, i)
