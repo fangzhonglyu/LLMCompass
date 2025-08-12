@@ -5,6 +5,7 @@ import shutil
 from typing import List, Tuple, Callable
 
 from pynvml import nvmlDeviceGetTotalEnergyConsumption, nvmlInit, nvmlDeviceGetHandleByIndex
+import torch.nn.functional as F
 
 
 COLS = shutil.get_terminal_size().columns
@@ -103,19 +104,19 @@ def test_softmax_iter(name: str,N:int, M:int, datatype:torch.dtype=torch.float16
 
     return test_kernel_iter(name, setup, capture, iters)
 
-# def test_conv_iter(name: str, N:int, C:int, H:int, W:int, K:int, datatype:torch.dtype=torch.float16, iters:int=100):
-#     def setup():
-#         input_tensor = torch.randn(N, C, H, W, dtype=datatype, device='cuda')
-#         weight = torch.randn(K, C, 3, 3, dtype=datatype, device='cuda')
-#         output_tensor = torch.empty(N, K, H - 2, W - 2, dtype=datatype, device='cuda')
-#         return input_tensor, weight, output_tensor
+def test_conv_iter(name: str, N, C, P, Q, M, G, R, S, HS:int, WS:int, datatype:torch.dtype=torch.float16, iters:int=100):
+    def setup():
+        input_tensor = torch.randn(N, C, P, Q, dtype=datatype, device='cuda')
+        weight_tensor = torch.randn(M, C//G, R, S, dtype=datatype, device='cuda')
+        output_tensor = torch.empty(N, M, (P - R) // HS + 1, (Q - S) // WS + 1, dtype=datatype, device='cuda')
+        return input_tensor, weight_tensor, output_tensor
 
-#     def capture(state):
-#         input_tensor, weight, output_tensor = state
-#         torch.nn.functional.conv2d(input_tensor, weight, out=output_tensor)
-#         return output_tensor
+    def capture(state):
+        input_tensor, weight_tensor, output_tensor = state
+        F.conv2d(input_tensor, weight_tensor, out=output_tensor, stride=(HS, WS), padding=(R//2, S//2), groups=G)
+        return output_tensor
 
-#     return test_kernel_iter(name, setup, capture, iters)
+    return test_kernel_iter(name, setup, capture, iters)
 
 
 def run_phase(res_list: List[dict], func: Callable, *args, **kwargs):
