@@ -22,7 +22,7 @@ def set_device(device_index: int):
     print(f"Using CUDA device: {torch.cuda.get_device_name(device_index)}")
 
 
-def test_kernel_iter(name: str, setup_func: callable, capture_func: callable, iters: int = 100):
+def test_kernel_iter(name: str, setup_func: Callable, capture_func: Callable, iters: int = 100):
 
     global handle
     state = setup_func()
@@ -97,11 +97,11 @@ def test_softmax_iter(name: str,N:int, M:int, datatype:torch.dtype=torch.float16
     return test_kernel_iter(name, setup, capture, iters, handle)
 
 
-def run_phase(res_list: List[dict], func: callable, *args, **kwargs):
+def run_phase(res_list: List[dict], func: Callable, *args, **kwargs):
     res_list.append(func(*args, **kwargs))
-    print(GREEN_DOT, end='')
+    print(GREEN_DOT, end='', flush=True)
 
-def run_pipeline(pipe_name, phase_list:List[Tuple[str, Callable]], output_dir, device_index: int = 0) -> List[dict]:
+def run_pipeline(pipe_name, phase_list:List[Tuple[str, Callable]], output_dir, device_index: int = 0) -> dict:
     results = []
 
     for name, lambda_func in phase_list:
@@ -112,7 +112,7 @@ def run_pipeline(pipe_name, phase_list:List[Tuple[str, Callable]], output_dir, d
     total_pipeline_latency = sum(result['avg_latency_ms'] for result in results)
     total_pipeline_energy = sum(result['avg_energy_J'] for result in results)
 
-    output_file = os.path.join(output_dir, f"pipeline_benchmark_{name}.txt")
+    output_file = os.path.join(output_dir, f"pipeline_benchmark_{pipe_name}.txt")
     with open(output_file, 'w') as f:
         f.write(f"Results for {pipe_name}:\n")
         for result in results:

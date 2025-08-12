@@ -2,6 +2,7 @@ import os
 from typing import List, Tuple
 from itertools import product
 import pandas as pd
+from torch import float16
 
 from kernels import test_matmul_iter, test_softmax_iter, run_pipeline, set_device
 
@@ -31,15 +32,15 @@ def decode_params() -> List[Tuple]:
 
 def gpt_OPT_66B_pipeline(b, p, m, o, d, h, e, f, i) -> List:
     phases = []
-    phases.append(('Q-proj',        lambda: test_matmul_iter("Q-proj", b * p, o, d, "fp16", iters=100)))
-    phases.append(('K-proj',        lambda: test_matmul_iter("K-proj", b * p, o, d, "fp16", iters=100)))
-    phases.append(('V-proj',        lambda: test_matmul_iter("V-proj", b * p, o, d, "fp16", iters=100)))
-    phases.append(('QKT',           lambda: test_matmul_iter("QKT", h * b * p, e, m, "fp16", iters=100)))
-    phases.append(('Softmax',       lambda: test_softmax_iter("Softmax", h * b * p, m, "fp16", iters=100)))
-    phases.append(('AV',            lambda: test_matmul_iter("AV", h * b * p, m, f, "fp16", iters=100)))
-    phases.append(('Output-proj',   lambda: test_matmul_iter("Output-proj", b * p, h * f, o, "fp16", iters=100)))
-    phases.append(('FFN-1',         lambda: test_matmul_iter("FFN-1", b * p, o, i, "fp16", iters=100)))
-    phases.append(('Down-proj',     lambda: test_matmul_iter("Down-proj", b * p, i, o, "fp16", iters=100)))
+    phases.append(('Q-proj',        lambda: test_matmul_iter("Q-proj", b * p, o, d, float16, iters=100)))
+    phases.append(('K-proj',        lambda: test_matmul_iter("K-proj", b * p, o, d, float16, iters=100)))
+    phases.append(('V-proj',        lambda: test_matmul_iter("V-proj", b * p, o, d, float16, iters=100)))
+    phases.append(('QKT',           lambda: test_matmul_iter("QKT", h * b * p, e, m, float16, iters=100)))
+    phases.append(('Softmax',       lambda: test_softmax_iter("Softmax", h * b * p, m, float16, iters=100)))
+    phases.append(('AV',            lambda: test_matmul_iter("AV", h * b * p, m, f, float16, iters=100)))
+    phases.append(('Output-proj',   lambda: test_matmul_iter("Output-proj", b * p, h * f, o, float16, iters=100)))
+    phases.append(('FFN-1',         lambda: test_matmul_iter("FFN-1", b * p, o, i, float16, iters=100)))
+    phases.append(('Down-proj',     lambda: test_matmul_iter("Down-proj", b * p, i, o, float16, iters=100)))
     name = f"B{b}_P{p}_M{m}_O{o}_D{d}_H{h}_E{e}_F{f}_I{i}"
     return name, phases
 
