@@ -5,7 +5,7 @@ from torch import float16
 from kernels import test_matmul_iter, test_conv_iter
 from pipeline_benchmark import pipeline_benchmark
 
-RESNET50_ITERS = [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000]
+RESNET50_ITERS = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
 
 
 def resnet50_pipeline(N:int) -> List[Tuple[str, Callable]]:
