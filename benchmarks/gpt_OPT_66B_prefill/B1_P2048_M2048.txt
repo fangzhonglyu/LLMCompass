@@ -1,12 +1,14 @@
 Results for B1_P2048_M2048:
-{'name': 'Q-proj', 'iters': 1000, 'avg_latency_ms': 1.435869140625, 'avg_energy_J': 0.5858260000000001, 'avg_power_W': 407.97377673209655}
-{'name': 'K-proj', 'iters': 1000, 'avg_latency_ms': 1.4372926025390624, 'avg_energy_J': 0.585175, 'avg_power_W': 407.11885153963095}
-{'name': 'V-proj', 'iters': 1000, 'avg_latency_ms': 1.43798779296875, 'avg_energy_J': 0.547697, 'avg_power_W': 380.85938951886044}
-{'name': 'QKT', 'iters': 5000, 'avg_latency_ms': 0.814245703125, 'avg_energy_J': 0.31914000000000003, 'avg_power_W': 391.936445998831}
-{'name': 'Softmax', 'iters': 5000, 'avg_latency_ms': 1.1690322265625, 'avg_energy_J': 0.40615500000000004, 'avg_power_W': 347.422330829836}
-{'name': 'AV', 'iters': 5000, 'avg_latency_ms': 0.503174755859375, 'avg_energy_J': 0.199765, 'avg_power_W': 396.99609366820533}
-{'name': 'Output-proj', 'iters': 300, 'avg_latency_ms': 1.429940897623698, 'avg_energy_J': 0.63802, 'avg_power_W': 446.12599823591495}
-{'name': 'FFN-1', 'iters': 300, 'avg_latency_ms': 5.411061604817708, 'avg_energy_J': 2.238766666666667, 'avg_power_W': 413.7206589638054}
-{'name': 'Down-proj', 'iters': 300, 'avg_latency_ms': 5.70053955078125, 'avg_energy_J': 2.243326666666667, 'avg_power_W': 393.51220406755186}
-Total Pipeline Latency (ms): 19.339144274902342
-Total Pipeline Energy (J): 7.763871333333334
+{'name': 'Q-proj', 'iters': 1000, 'avg_latency_ms': 1.4621224365234375, 'avg_energy_J': 0.589342, 'avg_power_W': 403.0529694588997}
+{'name': 'K-proj', 'iters': 1000, 'avg_latency_ms': 1.4626201171875, 'avg_energy_J': 0.55657, 'avg_power_W': 380.51391606364115}
+{'name': 'V-proj', 'iters': 1000, 'avg_latency_ms': 1.4645504150390625, 'avg_energy_J': 0.5525220000000001, 'avg_power_W': 377.2493433720489}
+{'name': 'QKT', 'iters': 5000, 'avg_latency_ms': 0.8270123046875, 'avg_energy_J': 0.32508539999999997, 'avg_power_W': 393.07682630782614}
+{'name': 'Softmax', 'iters': 5000, 'avg_latency_ms': 1.16985693359375, 'avg_energy_J': 0.4296004, 'avg_power_W': 367.2196208524398}
+{'name': 'AV', 'iters': 5000, 'avg_latency_ms': 0.504031005859375, 'avg_energy_J': 0.199959, 'avg_power_W': 396.7091296593668}
+{'name': 'Output-proj', 'iters': 500, 'avg_latency_ms': 1.4578934326171875, 'avg_energy_J': 0.6226119999999999, 'avg_power_W': 427.03212120201164}
+{'name': 'FFN-1', 'iters': 500, 'avg_latency_ms': 5.51417431640625, 'avg_energy_J': 2.162118, 'avg_power_W': 392.0924749329251}
+{'name': 'Down-proj', 'iters': 500, 'avg_latency_ms': 5.78445947265625, 'avg_energy_J': 2.30857, 'avg_power_W': 399.08962445748523}
+Total Pipeline Latency (ms): 19.646720434570312
+Total Pipeline Energy (J): 7.7463788000000005
+Bottleneck Latency (ms): 5.78445947265625
+Total Pipeline Energy with Idle (J): 9.204982466870117

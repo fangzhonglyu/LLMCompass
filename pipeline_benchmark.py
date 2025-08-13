@@ -2,7 +2,7 @@ import os
 from typing import List, Tuple
 import pandas as pd
 
-from kernels import run_pipeline, set_device
+from kernels import run_pipeline, set_device, profile_device_idle_power
 
 def save_csv_wide(all_results, filename="summary.csv"):
     # Flatten results -> long table
@@ -50,12 +50,14 @@ def save_csv_wide(all_results, filename="summary.csv"):
 def pipeline_benchmark(output_dir:str, pipelines:List[Tuple], device_index:int = 0) -> List[dict]:
     set_device(device_index)
 
+    # profile_device_idle_power() # Assume 45 W idle power for now, remove inconsistency in measurements
+    
     os.makedirs(output_dir, exist_ok=True)
     all_results = []
 
     for pipeline in pipelines:
         name, phases = pipeline
-        all_results.append(run_pipeline(name, phases, output_dir, device_index))
+        all_results.append(run_pipeline(name, phases, output_dir))
 
     csv_file = os.path.join(output_dir, "summary.csv")
     save_csv_wide(all_results, filename=csv_file)
