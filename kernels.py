@@ -104,17 +104,31 @@ def test_softmax_iter(name: str,N:int, M:int, datatype:torch.dtype=torch.float16
 
     return test_kernel_iter(name, setup, capture, iters)
 
+
 def test_conv_iter(name: str, N, C, P, Q, M, G, R, S, HS:int, WS:int, datatype:torch.dtype=torch.float16, iters:int=100):
+    """
+    Test a 2D conv using Pytorch FF conv2d.
+    - N: batch size
+    - C: input channels
+    - P: output height
+    - Q: output width
+    - M: output channels
+    - G: groups
+    - R: kernel height
+    - S: kernel width
+    - HS: height stride
+    - WS: width stride
+    """
     def setup():
-        input_tensor = torch.randn(N, C, P, Q, dtype=datatype, device='cuda')
+        H_in = (P-1) * HS + R # Input height
+        W_in = (Q-1) * WS + S # Input width
+        input_tensor = torch.randn(N, C, H_in, W_in, dtype=datatype, device='cuda')
         weight_tensor = torch.randn(M, C//G, R, S, dtype=datatype, device='cuda')
-        output_tensor = torch.empty(N, M, (P - R) // HS + 1, (Q - S) // WS + 1, dtype=datatype, device='cuda')
-        return input_tensor, weight_tensor, output_tensor
+        return input_tensor, weight_tensor
 
     def capture(state):
-        input_tensor, weight_tensor, output_tensor = state
-        F.conv2d(input_tensor, weight_tensor, out=output_tensor, stride=(HS, WS), padding=(R//2, S//2), groups=G)
-        return output_tensor
+        input_tensor, weight_tensor = state
+        torch.nn.functional.conv2d(input_tensor, weight_tensor, stride=(HS, WS), groups=G)
 
     return test_kernel_iter(name, setup, capture, iters)
 
@@ -123,7 +137,7 @@ def run_phase(res_list: List[dict], func: Callable, *args, **kwargs):
     res_list.append(func(*args, **kwargs))
     print(GREEN_DOT, end='', flush=True)
 
-def run_pipeline(pipe_name, phase_list:List[Tuple[str, Callable]], output_dir, device_index: int = 0) -> dict:
+def run_pipeline(pipe_name, phase_list:List[Tuple[str, Callable]], output_dir) -> dict:
     results = []
 
     start_time = time.perf_counter()
